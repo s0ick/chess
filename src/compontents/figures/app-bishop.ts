@@ -12,4 +12,12 @@ export class AppBishop extends AppFigure {
     this.logo = color === AppColors.BLACK ? blackLogo : whiteLogo;
     this.name = FigureNames.BISHOP;
   }
+
+  canMove(target: AppCell): boolean {
+    if (!super.canMove(target)) {
+      return false;
+    }
+
+    return this.cell.isEmptyDiagonal(target);
+  }
 }

@@ -16,6 +16,7 @@ export const AppCellContainer: FC<Props> = ({cell, selected, clickCallback}) => 
     <AppCellWrapper
       bgc={cell.color}
       selected={selected}
+      isFigure={!!cell.figure || cell.available}
       onClick={() => clickCallback(cell)}
       style={{
         backgroundColor: (cell.available && cell.figure) ? AVAILABLE_COLOR : ''

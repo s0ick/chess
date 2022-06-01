@@ -15,12 +15,6 @@ interface BoardProps {
 export const AppBoardContainer: FC<BoardProps> = ({board, setBoard}) => {
   const [selectedCell, setSelectedCell] = useState<AppCell | null>(null);
 
-  const onClickCallback = (cell: AppCell) => {
-    if (cell.figure) {
-      setSelectedCell(cell);
-    }
-  };
-
   const updateBoard = () => {
     const newBoard = board.getCopyBoard();
     setBoard(newBoard);
@@ -30,6 +24,18 @@ export const AppBoardContainer: FC<BoardProps> = ({board, setBoard}) => {
     board.highlightCells(selectedCell);
     updateBoard();
   };
+
+  const onClickCallback = useCallback(
+    (cell: AppCell) => {
+      if (selectedCell && selectedCell !== cell && selectedCell.figure?.canMove(cell)) {
+        selectedCell.moveFigure(cell);
+        setSelectedCell(null);
+        updateBoard();
+      } else {
+        setSelectedCell(cell);
+      }
+    }, [selectedCell]
+  );
 
   useEffect(() => {
     highlightCells();

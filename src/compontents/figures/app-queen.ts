@@ -12,4 +12,20 @@ export class AppQueen extends AppFigure {
     this.logo = color === AppColors.BLACK ? blackLogo : whiteLogo;
     this.name = FigureNames.QUEEN;
   }
+
+  canMove(target: AppCell): boolean {
+    if (!super.canMove(target)) {
+      return false;
+    }
+
+    if (this.cell.isEmptyVertical(target)) {
+      return true;
+    }
+
+    if (this.cell.isEmptyHorizontal(target)) {
+      return true;
+    }
+
+    return this.cell.isEmptyDiagonal(target);
+  }
 }

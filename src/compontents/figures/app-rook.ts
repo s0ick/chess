@@ -12,4 +12,16 @@ export class AppRook extends AppFigure {
     this.logo = color === AppColors.BLACK ? blackLogo : whiteLogo;
     this.name = FigureNames.ROOK;
   }
+
+  canMove(target: AppCell): boolean {
+    if (!super.canMove(target)) {
+      return false;
+    }
+
+    if (this.cell.isEmptyVertical(target)) {
+      return true;
+    }
+
+    return this.cell.isEmptyHorizontal(target);
+  }
 }

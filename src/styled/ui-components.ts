@@ -4,7 +4,8 @@ import {AVAILABLE_COLOR, BLACK_PIECES, SELECTED_CELL, WHITE_PIECES} from './colo
 
 export type StylesProps = {
   bgc?: string,
-  selected: boolean
+  selected: boolean,
+  isFigure: boolean
 };
 
 export const AppPageWrapper = styled.div`
@@ -38,6 +39,8 @@ export const AppCellWrapper = styled.div<StylesProps>`
     }
     return props.bgc === 'black' ? BLACK_PIECES: WHITE_PIECES;
   }};
+  
+  cursor: ${props => props.isFigure ? 'pointer' : 'default'};
   
   img {
     width: 64px;
