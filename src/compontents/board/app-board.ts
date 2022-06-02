@@ -6,9 +6,12 @@ import {AppQueen} from '../figures/app-queen';
 import {AppBishop} from '../figures/app-bishop';
 import {AppKnight} from '../figures/app-knight';
 import {AppRook} from '../figures/app-rook';
+import {AppFigure} from '../figures/app-figure';
 
 export class AppBoard {
-  cells: AppCell[][] = []
+  cells: AppCell[][] = [];
+  lostBlackFigures: AppFigure[] = [];
+  lostWhiteFigures: AppFigure[] = [];
 
   public initCells() {
      for (let i = 0; i < 8; i++) {
@@ -44,6 +47,8 @@ export class AppBoard {
   public getCopyBoard() : AppBoard {
     const newBoard = new AppBoard();
     newBoard.cells = this.cells;
+    newBoard.lostBlackFigures = this.lostBlackFigures;
+    newBoard.lostWhiteFigures = this.lostWhiteFigures;
     return newBoard;
   }
 

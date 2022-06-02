@@ -23,17 +23,26 @@ export class AppCell {
     this.id = Math.random();
   }
 
+  addLostFigure(figure: AppFigure) : void {
+    if (figure.color === AppColors.BLACK) {
+      this.board?.lostBlackFigures.push(figure);
+      return;
+    }
+
+    this.board?.lostWhiteFigures.push(figure);
+  };
+
   isEnemy(target: AppCell) : boolean {
     if (target.figure) {
       return target.figure?.color !== this.figure?.color;
     }
 
     return false;
-  }
+  };
 
   isEmpty() : boolean {
     return this.figure === null;
-  }
+  };
 
   isEmptyVertical(target: AppCell) : boolean {
     if (target.x !== this.x) {
@@ -50,7 +59,7 @@ export class AppCell {
     }
 
     return true;
-  }
+  };
 
   isEmptyHorizontal(target: AppCell) : boolean {
     if (target.y !== this.y) {
@@ -67,7 +76,7 @@ export class AppCell {
     }
 
     return true;
-  }
+  };
 
   isEmptyDiagonal(target: AppCell) : boolean {
     const absX = Math.abs(target.x - this.x);
@@ -87,18 +96,23 @@ export class AppCell {
     }
 
     return true;
-  }
+  };
 
-  setFigure(figure: AppFigure) {
+  setFigure(figure: AppFigure) : void {
     this.figure = figure;
     this.figure.cell = this;
-  }
+  };
 
-  moveFigure(target: AppCell) {
+  moveFigure(target: AppCell) : void {
     if (this.figure?.canMove(target)) {
       this.figure.moveFigure(target);
+
+      if (target.figure) {
+        this.addLostFigure(target.figure);
+      }
+
       target.setFigure(this.figure);
       this.figure = null;
     }
-  }
+  };
 }

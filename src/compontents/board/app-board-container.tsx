@@ -2,44 +2,51 @@ import React, {FC, useCallback, useEffect, useState} from 'react';
 
 import {AppBoardWrapper} from '../../styled/ui-components';
 
-import {AppCell} from '../cell/app-cell';
 import {AppCellContainer} from '../cell/app-cell-container';
+import {AppCell} from '../cell/app-cell';
+import {AppPlayer} from '../player/app-player';
 
 import {AppBoard} from './app-board';
 
 interface BoardProps {
   board: AppBoard;
   setBoard: (board: AppBoard) => void;
+  currentPlayer: AppPlayer | null;
+  swapPlayer: () => void;
+  isStopGame: boolean;
 }
 
-export const AppBoardContainer: FC<BoardProps> = ({board, setBoard}) => {
+export const AppBoardContainer: FC<BoardProps> = ({
+  board, setBoard, currentPlayer, swapPlayer, isStopGame
+}) => {
   const [selectedCell, setSelectedCell] = useState<AppCell | null>(null);
 
-  const updateBoard = () => {
-    const newBoard = board.getCopyBoard();
-    setBoard(newBoard);
-  };
-
-  const highlightCells = () => {
-    board.highlightCells(selectedCell);
-    updateBoard();
-  };
+  const updateBoard = useCallback(
+    () => {
+      const newBoard = board.getCopyBoard();
+      setBoard(newBoard);
+    }, [setBoard, board]
+  );
 
   const onClickCallback = useCallback(
     (cell: AppCell) => {
-      if (selectedCell && selectedCell !== cell && selectedCell.figure?.canMove(cell)) {
+      if (isStopGame) {
+        setSelectedCell(null);
+      } else if (selectedCell && selectedCell !== cell && selectedCell.figure?.canMove(cell)) {
         selectedCell.moveFigure(cell);
+        swapPlayer();
         setSelectedCell(null);
         updateBoard();
-      } else {
+      } else if (cell.figure?.color === currentPlayer?.color) {
         setSelectedCell(cell);
       }
-    }, [selectedCell]
+    }, [selectedCell, swapPlayer, currentPlayer, updateBoard]
   );
 
   useEffect(() => {
-    highlightCells();
-  }, [selectedCell])
+    board.highlightCells(selectedCell);
+    updateBoard();
+  }, [selectedCell]);
 
   return (
     <AppBoardWrapper>
